@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+		
+	<bean id="datePropEditor" class="org.github.djarosz.spring.csv.editors.DatePropertyEditor" scope="prototype">
+		<constructor-arg>
+			<bean class="java.text.SimpleDateFormat">
+				<constructor-arg value="yyyy-MM-dd'T'HH:mm:ss" />
+			</bean>
+		</constructor-arg>
+		<constructor-arg value="true" />
+		<constructor-arg value="-1" />
+	</bean>
+
+	<bean id="toObjectWithGlobalEditors" class="org.github.djarosz.spring.csv.CSVRecordToObjectConverter">
+		<property name="recordDescriptor">
+			<bean class="org.github.djarosz.spring.csv.CSVRecordDescriptor">
+				<property name="fieldSeparator" value=";" />
+				<property name="beanClass" value="org.github.djarosz.spring.csv.TestObject" />
+				<property name="fieldNamesString" value="stringValue,integerValue,doubleValue,dateValue,booleanValue,enumValue,nestedObject.nestedStringValue,nestedObject.nestedDateValue" />
+				<property name="typePropertyEditors">
+					<map>
+						<entry key="java.util.Date" value-ref="datePropEditor" />
+					</map>
+				</property>
+			</bean>
+		</property>
+	</bean>
+
+	<bean id="toObjectWithFieldsDefined" class="org.github.djarosz.spring.csv.CSVRecordToObjectConverter">
+		<property name="recordDescriptor">
+			<bean class="org.github.djarosz.spring.csv.CSVRecordDescriptor">
+				<property name="fieldSeparator" value=";" />
+				<property name="beanClass" value="org.github.djarosz.spring.csv.TestObject" />
+				<property name="fields">
+					<list>
+						<bean class="org.github.djarosz.spring.csv.CSVFieldDescriptor">
+							<property name="name" value="stringValue" />
+						</bean>
+						<bean class="org.github.djarosz.spring.csv.CSVFieldDescriptor">
+							<property name="name" value="integerValue" />
+						</bean>
+						<bean class="org.github.djarosz.spring.csv.CSVFieldDescriptor">
+							<property name="name" value="doubleValue" />
+						</bean>
+						<bean class="org.github.djarosz.spring.csv.CSVFieldDescriptor">
+							<property name="name" value="dateValue" />
+							<property name="propertyEditor" ref="datePropEditor" />
+						</bean>
+						<bean class="org.github.djarosz.spring.csv.CSVFieldDescriptor">
+							<property name="name" value="booleanValue" />
+						</bean>
+						<bean class="org.github.djarosz.spring.csv.CSVFieldDescriptor">
+							<property name="name" value="enumValue" />
+						</bean>
+						<bean class="org.github.djarosz.spring.csv.CSVFieldDescriptor">
+							<property name="name" value="nestedObject.nestedStringValue" />
+						</bean>
+						<bean class="org.github.djarosz.spring.csv.CSVFieldDescriptor">
+							<property name="name" value="nestedObject.nestedDateValue" />
+							<property name="propertyEditor" ref="datePropEditor" />
+						</bean>
+					</list>
+				</property>
+			</bean>
+		</property>
+	</bean>
+
+	<bean id="toObjectWithCustomEditorsDescriptor" class="org.github.djarosz.spring.csv.CSVRecordDescriptor">
+		<property name="fieldSeparator" value=";" />
+		<property name="beanClass" value="org.github.djarosz.spring.csv.TestObject" />
+		<property name="fieldNamesString" value="
+			stringValue,integerValue,doubleValue,
+			dateValue,booleanValue,enumValue,
+			nestedObject.nestedStringValue,
+			nestedObject.nestedDateValue" />
+		<property name="fieldPropertyEditors">
+			<map>
+				<entry key="dateValue" value-ref="datePropEditor" />
+				<entry key="nestedObject.nestedDateValue" value-ref="datePropEditor" />
+			</map>
+		</property>
+	</bean>
+
+	<bean id="toObjectWithCustomEditors" class="org.github.djarosz.spring.csv.CSVRecordToObjectConverter">
+		<property name="recordDescriptor" ref="toObjectWithCustomEditorsDescriptor" />
+	</bean>
+	
+	<bean id="toCsvRecord" class="org.github.djarosz.spring.csv.ObjectToCSVRecordConverter">
+		<property name="recordDescriptor" ref="toObjectWithCustomEditorsDescriptor" />
+	</bean>
+
+	<bean id="csvExporter" class="org.github.djarosz.spring.csv.CSVExporter">
+		<property name="converter" ref="toCsvRecord"/>
+	</bean>
+
+	<bean id="csvExporterFromFactoryBean" class="org.github.djarosz.spring.csv.CSVExporterFactoryBean">
+		<property name="fieldSeparator" value=";" />
+		<property name="fieldNamesString" value="stringValue,integerValue,doubleValue,dateValue,booleanValue,enumValue,nestedObject.nestedStringValue,nestedObject.nestedDateValue" />
+		<property name="typePropertyEditors">
+			<map>
+				<entry key="java.util.Date" value-ref="datePropEditor" />
+			</map>
+		</property>
+	</bean>
+
+	<bean id="csvExporterWithExpressions" class="org.github.djarosz.spring.csv.CSVExporterFactoryBean">
+		<property name="fieldSeparator" value=";" />
+		<property name="fieldNamesString" value="
+			!stringValue + '-' + nestedObject.nestedStringValue,
+			!integerValue + integerValue,
+			!'statictext',
+			booleanValue,
+			doubleValue,
+			!new java.text.SimpleDateFormat('yyyy-MM-dd+HHmmssSSS').format(dateValue),
+			!T(org.github.djarosz.spring.csv.EOLSeq).CR.ordinal(),
+			!null" />
+	</bean>
+
+</beans>
