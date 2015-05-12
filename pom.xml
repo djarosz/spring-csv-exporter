@@ -4,13 +4,13 @@
 
 	<groupId>com.github.djarosz.spring</groupId>
 	<artifactId>spring-csv-exporter</artifactId>
-	<version>1.0.0</version>
+	<version>1.0.1-SNAPSHOT</version>
 
 	<scm>
 		<connection>scm:git:git@github.com:djarosz/spring-csv-exporter.git</connection>
 		<url>scm:git:git@github.com:djarosz/spring-csv-exporter.git</url>
 		<developerConnection>scm:git:git@github.com:djarosz/spring-csv-exporter.git</developerConnection>
-	  <tag>spring-csv-exporter-1.0.0</tag>
+	  <tag>HEAD</tag>
   </scm>
 
 	<dependencies>
