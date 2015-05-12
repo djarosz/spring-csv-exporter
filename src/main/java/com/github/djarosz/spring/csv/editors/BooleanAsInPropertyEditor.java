@@ -1,4 +1,4 @@
-package org.github.djarosz.spring.csv.editors;
+package com.github.djarosz.spring.csv.editors;
 
 import static org.apache.commons.lang.StringUtils.EMPTY;
 import static org.apache.commons.lang.StringUtils.isBlank;

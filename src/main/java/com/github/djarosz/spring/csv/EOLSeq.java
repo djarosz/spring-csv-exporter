@@ -1,4 +1,4 @@
-package org.github.djarosz.spring.csv;
+package com.github.djarosz.spring.csv;
 
 /**
  * Created: 2013-09-05 10:06

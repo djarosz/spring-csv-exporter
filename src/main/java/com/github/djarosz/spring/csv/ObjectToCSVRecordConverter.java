@@ -1,4 +1,4 @@
-package org.github.djarosz.spring.csv;
+package com.github.djarosz.spring.csv;
 
 import static org.apache.commons.lang.StringUtils.EMPTY;
 import static org.apache.commons.lang.StringUtils.defaultString;

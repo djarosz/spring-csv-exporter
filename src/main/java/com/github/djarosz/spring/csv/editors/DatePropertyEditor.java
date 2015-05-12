@@ -1,4 +1,4 @@
-package org.github.djarosz.spring.csv.editors;
+package com.github.djarosz.spring.csv.editors;
 
 import java.beans.PropertyEditorSupport;
 import java.text.DateFormat;

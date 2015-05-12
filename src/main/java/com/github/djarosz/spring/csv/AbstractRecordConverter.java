@@ -1,4 +1,4 @@
-package org.github.djarosz.spring.csv;
+package com.github.djarosz.spring.csv;
 
 import java.beans.PropertyEditor;
 import java.util.Map;
